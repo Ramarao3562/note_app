@@ -2,58 +2,44 @@ pipeline {
     agent any
 
     environment {
-        NODE_VERSION = '14' // or your Node.js version
+        PYTHON_ENV = "python3"
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                echo 'Cloning repository...'
-                checkout scm
+                git 'https://github.com/Ramarao3562/note_app.git'
             }
         }
-        
+
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                script {
-                    if (isUnix()) {
-                        bat "nvm install ${NODE_VERSION}"
-                        bat "nvm use ${NODE_VERSION}"
-                        bat 'npm install'
-                    } else {
-                        bat "nvm install ${NODE_VERSION}"
-                        bat "nvm use ${NODE_VERSION}"
-                        bat 'npm install'
-                    }
-                }
+                bat '${PYTHON_ENV} -m pip install -r requirements.txt'
             }
         }
 
         stage('Build Application') {
             steps {
                 echo 'Building application...'
-                script {
-                    if (isUnix()) {
-                        bat 'npm run build'
-                    } else {
-                        bat 'npm run build'
-                    }
-                }
+                // Add any other build commands here
             }
         }
-        
+
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Add your Windows-compatible deployment commands here
+                bat '${PYTHON_ENV} app.py'
             }
         }
     }
 
     post {
+        always {
+            cleanWs()
+        }
         success {
-            echo 'Deployment succeeded.'
+            echo 'Deployment successful!'
         }
         failure {
             echo 'Deployment failed.'
