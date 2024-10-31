@@ -15,7 +15,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                bat '${PYTHON_ENV} -m pip install -r requirements.txt'
+                bat 'C:\\Users\\achut\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pip install -r requirements.txt'
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                bat '${PYTHON_ENV} app.py'
+                bat 'C:\\Users\\achut\\AppData\\Local\\Programs\\Python\\Python313\\python.exe app.py'
             }
         }
     }
